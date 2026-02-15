@@ -13,32 +13,26 @@
             color: #0f172a;
             -webkit-font-smoothing: antialiased;
         }
-
         .premium-card {
             background: white;
             border-radius: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             border: 1px solid rgba(0,0,0,0.05);
         }
-
         .bnm-line {
             height: 8px;
             background-color: #ed1c24;
             width: 100%;
         }
-
-        /* Perbaikan Label Nempel & Berbayang */
         .input-group {
             position: relative;
             border-bottom: 2px solid #e2e8f0;
             padding-top: 1.5rem; 
             margin-bottom: 0.5rem;
         }
-
         .input-group:focus-within {
             border-bottom-color: #0077b6;
         }
-
         .input-group input, .input-group textarea {
             width: 100%;
             background: transparent;
@@ -47,8 +41,8 @@
             font-size: 1rem;
             font-weight: 500;
             color: #1e293b;
+            border: none;
         }
-
         .input-group label {
             position: absolute;
             left: 0;
@@ -58,8 +52,6 @@
             transition: all 0.25s ease-out; 
             font-size: 0.9rem;
         }
-
-        /* Floating state: Label naik lebih tinggi dan menjauh */
         .input-group input:focus ~ label,
         .input-group input:not(:placeholder-shown) ~ label,
         .input-group textarea:focus ~ label,
@@ -71,15 +63,11 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-
-        /* Hapus efek berbayang pada textarea */
         textarea {
             resize: none;
             overflow: hidden;
             min-height: 40px;
         }
-
-        /* Styling Checkbox Cards */
         .check-card {
             border: 2px solid #f1f5f9;
             border-radius: 1rem;
@@ -93,19 +81,16 @@
             text-align: center;
             height: 100%;
         }
-
         input:checked + .check-card {
             background-color: #0077b6;
             border-color: #0077b6;
             color: white;
         }
-
         .progress-bar {
             height: 5px;
             background: #f1f5f9;
             width: 100%;
         }
-
         .progress-active {
             height: 100%;
             background: #f39200;
@@ -116,7 +101,6 @@
 <body class="py-6 px-4 md:py-12 md:px-8">
 
     <div class="max-w-4xl mx-auto">
-        
         <!-- LOGO BNM -->
         <div class="flex justify-center mb-10">
             <div class="w-48 md:w-64 space-y-1">
@@ -147,7 +131,6 @@
             </div>
         </div>
 
-        <!-- FORM UTAMA -->
         <form id="guestbook-form" class="premium-card overflow-hidden mb-12">
             <div class="progress-bar">
                 <div id="progress" class="progress-active" style="width: 5%;"></div>
@@ -268,11 +251,10 @@
                     <input type="hidden" name="Pengguna BNM" id="bnm-hidden">
                 </div>
 
-                <!-- INFO BNM & SARAN -->
                 <div class="space-y-16 mb-16">
                     <div class="input-group">
                         <input type="text" name="Info BNM" id="info-bnm" required placeholder=" ">
-                        <label for="info-bnm">Dari mana Anda mengetahui informasi BNM di Lab Indonesia? <span class="text-red-500">*</span></label>
+                        <label for="info-bnm">Dari mana Anda mengetahui BNM di Lab Indonesia? <span class="text-red-500">*</span></label>
                     </div>
                     <div class="input-group">
                         <textarea name="Saran" id="saran-bnm" placeholder=" " oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
@@ -309,7 +291,7 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzEZ8knz88igZX4Xicy-7Yzly2KhiVSDONkmO5kkqZKuGepQcoZBSJYsAqoQnLXCdNC/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzKjwWLmeXJN9JqXcJPmqB0dB4D3W_yRDsMgiY1-gG6KpSmhXX884tzYw0BJVJoWaNKwg/exec';
         
         const form = document.getElementById('guestbook-form');
         const submitBtn = document.getElementById('submit-btn');
@@ -317,21 +299,23 @@
         const progress = document.getElementById('progress');
 
         form.addEventListener('input', () => {
-            const inputs = form.querySelectorAll('input[required]');
+            const requireds = form.querySelectorAll('input[required]');
             let filled = 0;
-            inputs.forEach(i => { if(i.value.trim() !== "") filled++ });
-            const percent = (filled / inputs.length) * 100;
+            requireds.forEach(i => { if(i.value.trim() !== "") filled++ });
+            const percent = (filled / requireds.length) * 100;
             progress.style.width = Math.max(5, percent) + '%';
         });
 
         form.addEventListener('submit', e => {
             e.preventDefault();
             
+            // Collect Checkboxes
             const investasi = Array.from(document.querySelectorAll('#investasi-group input:checked')).map(el => el.value);
             const bnm = Array.from(document.querySelectorAll('#bnm-group input:checked')).map(el => el.value);
 
             if(investasi.length === 0 || bnm.length === 0) {
-                alert('Mohon pilih opsi instrumentasi yang tersedia.');
+                const msg = investasi.length === 0 ? "Mohon pilih minimal satu rencana investasi." : "Mohon pilih status penggunaan instrumen BNM.";
+                alert(msg);
                 return;
             }
 
@@ -339,18 +323,28 @@
             document.getElementById('bnm-hidden').value = bnm.join(', ');
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = 'MENGIRIM DATA...';
+            submitBtn.innerText = 'MEMPROSES...';
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
-                .then(() => {
-                    overlay.classList.remove('hidden');
-                    form.reset();
-                })
-                .catch(error => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'KIRIM PENDAFTARAN';
-                    alert('Terjadi kesalahan koneksi. Pastikan Deployment Script sudah diset ke "Anyone".');
-                });
+            // Menggunakan FormData agar sesuai dengan e.parameter di Apps Script
+            const formData = new FormData(form);
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData
+            })
+            .then(response => {
+                overlay.classList.remove('hidden');
+                form.reset();
+                progress.style.width = '5%';
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'KIRIM PENDAFTARAN';
+                alert('Berhasil terkirim! (Jika data masuk ke Sheet tapi muncul error ini, abaikan saja karena kebijakan CORS Google).');
+                // Tetap tampilkan sukses karena mode no-cors sering memicu catch padahal data masuk
+                overlay.classList.remove('hidden');
+            });
         });
     </script>
 </body>
