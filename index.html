@@ -50,44 +50,57 @@
             .thick-line { height: 12px; }
         }
 
-        /* Custom Input Style */
+        /* Custom Input Style - Ditingkatkan agar tidak nempel */
         .input-group {
             position: relative;
             border-bottom: 2px solid #f1f5f9;
             transition: all 0.3s ease;
+            padding-top: 1rem; /* Tambah ruang atas */
         }
 
         .input-group:focus-within {
             border-bottom-color: #0077b6;
         }
 
-        .input-group input {
+        .input-group input, .input-group textarea {
             width: 100%;
             background: transparent;
             padding: 0.75rem 0;
             outline: none;
             font-size: 1rem;
             font-weight: 500;
+            display: block;
         }
 
         .input-group label {
             position: absolute;
             left: 0;
-            top: 0.75rem;
+            top: 1.75rem; /* Sesuaikan posisi awal */
             color: #94a3b8;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.875rem;
+            width: 100%;
         }
 
+        /* Floating state - Jarak pertanyaan ke jawaban dijauhkan sedikit (-2.2rem) */
         .input-group input:focus ~ label,
-        .input-group input:not(:placeholder-shown) ~ label {
-            transform: translateY(-1.5rem);
+        .input-group input:not(:placeholder-shown) ~ label,
+        .input-group textarea:focus ~ label,
+        .input-group textarea:not(:placeholder-shown) ~ label {
+            transform: translateY(-2.2rem);
             font-size: 0.7rem;
             font-weight: 800;
             color: #0077b6;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+        }
+
+        /* Perbaikan bug berbayang pada textarea */
+        textarea {
+            resize: none;
+            overflow: hidden;
+            transition: height 0.1s ease; /* Transisi hanya pada tinggi, bukan all untuk hindari ghosting */
         }
 
         /* Choice Cards */
@@ -302,12 +315,12 @@
                 <!-- Bagian 4: Pertanyaan Lainnya -->
                 <div class="space-y-12 md:space-y-20 mb-12 md:mb-28">
                     <div class="input-group">
-                        <input type="text" name="Info BNM" required placeholder=" ">
-                        <label>Sumber Informasi BNM di Lab Indonesia? <span class="text-red-500 font-bold">*</span></label>
+                        <input type="text" name="Info BNM" id="info-bnm" required placeholder=" ">
+                        <label for="info-bnm">Sumber Informasi BNM di Lab Indonesia? <span class="text-red-500 font-bold">*</span></label>
                     </div>
                     <div class="input-group">
-                        <textarea name="Saran" placeholder=" " rows="1" class="w-full bg-transparent py-2 md:py-3 outline-none transition-all resize-none overflow-hidden text-sm md:text-lg font-medium" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
-                        <label>Masukan & Saran untuk BNM</label>
+                        <textarea name="Saran" id="saran-bnm" placeholder=" " rows="1" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                        <label for="saran-bnm">Masukan & Saran untuk BNM</label>
                     </div>
                 </div>
 
