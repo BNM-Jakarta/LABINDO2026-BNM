@@ -2,320 +2,386 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Registrasi Pengunjung | Lab Indonesia & BNM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Pengunjung | BNM & Lab Indonesia</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@700&family=Roboto+Slab:wght@800;900&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif;
             background: #f8fafc;
-            color: #0f172a;
+            color: #011627;
+            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
+
+        .bnm-font {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 900;
+        }
+
+        /* Tipografi Lab Indonesia yang mirip aslinya */
+        .lab-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            line-height: 0.9;
+        }
+
         .premium-card {
             background: white;
             border-radius: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 20px 25px -5px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
-        .bnm-line {
-            height: 8px;
-            background-color: #ed1c24;
-            width: 100%;
+
+        @media (min-width: 768px) {
+            .premium-card { border-radius: 2.5rem; }
         }
+
+        /* Custom Input Style */
         .input-group {
             position: relative;
-            border-bottom: 2px solid #e2e8f0;
-            padding-top: 1.5rem; 
-            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
         }
+
         .input-group:focus-within {
             border-bottom-color: #0077b6;
         }
+
         .input-group input, .input-group textarea {
             width: 100%;
             background: transparent;
-            padding: 0.5rem 0;
+            padding: 0.8rem 0;
             outline: none;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 500;
-            color: #1e293b;
-            border: none;
         }
+
         .input-group label {
             position: absolute;
             left: 0;
-            top: 2rem; 
+            top: 0.8rem;
             color: #94a3b8;
             pointer-events: none;
-            transition: all 0.25s ease-out; 
-            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .input-group input:focus ~ label,
         .input-group input:not(:placeholder-shown) ~ label,
         .input-group textarea:focus ~ label,
         .input-group textarea:not(:placeholder-shown) ~ label {
-            transform: translateY(-2.8rem); 
+            transform: translateY(-1.7rem);
             font-size: 0.75rem;
             font-weight: 800;
             color: #0077b6;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.12em;
         }
-        textarea {
-            resize: none;
-            overflow: hidden;
-            min-height: 40px;
-        }
+
+        /* Choice Cards */
         .check-card {
             border: 2px solid #f1f5f9;
-            border-radius: 1rem;
-            padding: 1rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: all 0.2s;
             background: #fafafa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: 100%;
         }
+
         input:checked + .check-card {
             background-color: #0077b6;
             border-color: #0077b6;
             color: white;
+            box-shadow: 0 8px 15px -5px rgba(0, 119, 182, 0.3);
         }
-        .progress-bar {
-            height: 5px;
-            background: #f1f5f9;
-            width: 100%;
-        }
+
+        /* Progress Bar */
         .progress-active {
-            height: 100%;
-            background: #f39200;
-            transition: width 0.4s ease;
+            background: #f39200; 
+            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .year-stack {
+            display: flex;
+            flex-direction: column;
+            line-height: 0.75;
+            margin-left: 4px;
+            justify-content: center;
         }
     </style>
 </head>
-<body class="py-6 px-4 md:py-12 md:px-8">
+<body class="py-6 px-4 md:px-8 lg:py-16">
 
-    <div class="max-w-4xl mx-auto">
-        <!-- LOGO BNM -->
-        <div class="flex justify-center mb-10">
-            <div class="w-48 md:w-64 space-y-1">
-                <div class="bnm-line"></div>
-                <h2 class="text-5xl md:text-7xl font-black text-[#001f54] tracking-tighter text-center leading-none py-1">BNM</h2>
-                <div class="bnm-line"></div>
-                <p class="text-[9px] md:text-[10px] font-black text-[#001f54] tracking-[0.3em] uppercase text-center mt-3">PT. Berca Niaga Medika</p>
-            </div>
-        </div>
-
-        <!-- BANNER LAB INDONESIA -->
-        <div class="bg-gradient-to-br from-[#0077b6] to-[#005f8d] rounded-[2rem] shadow-lg overflow-hidden mb-8 border-4 border-white text-white">
-            <div class="p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
-                <div>
-                    <div class="flex items-baseline justify-center md:justify-start flex-wrap gap-1">
-                        <span class="text-4xl md:text-6xl font-black tracking-tighter">Lab</span>
-                        <span class="text-4xl md:text-6xl font-black tracking-tighter text-[#f39200]">Indonesia</span>
-                        <span class="text-xl font-bold opacity-40 ml-1">2026</span>
-                    </div>
-                    <p class="text-[10px] md:text-xs font-bold opacity-90 mt-4 leading-tight uppercase tracking-tight max-w-md">
-                        Indonesia Laboratory, Scientific Analytical Equipments and Services Exhibition and Conference
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- LOGO ATAS: BNM -->
+        <div class="flex items-center justify-center mb-8 md:mb-12">
+            <div class="flex items-center gap-3 md:gap-6 transform transition-all duration-500">
+                <div class="flex flex-col items-center">
+                    <div class="h-[6px] md:h-[10px] w-full bg-[#ed1c24]"></div>
+                    <h1 class="bnm-font text-4xl md:text-6xl lg:text-7xl text-[#001f54] leading-none py-1">BNM</h1>
+                    <div class="h-[6px] md:h-[10px] w-full bg-[#ed1c24]"></div>
+                </div>
+                <div class="flex items-center border-l-2 md:border-l-4 border-slate-200 pl-3 md:pl-6">
+                    <p class="bnm-font text-base md:text-2xl lg:text-3xl text-[#001f54] leading-tight uppercase">
+                        PT. Berca Niaga Medika
                     </p>
                 </div>
-                <div class="bg-black/10 p-5 rounded-2xl text-center md:text-right border border-white/10 min-w-[200px]">
-                    <span class="text-2xl md:text-4xl font-black block tracking-tight">15-17 APRIL</span>
-                    <span class="text-sm font-bold tracking-widest opacity-80 uppercase">ICE BSD CITY</span>
-                </div>
             </div>
         </div>
 
-        <form id="guestbook-form" class="premium-card overflow-hidden mb-12">
-            <div class="progress-bar">
-                <div id="progress" class="progress-active" style="width: 5%;"></div>
+        <!-- HEADER IDENTITAS: Lab Indonesia (Dibuat Responsive) -->
+        <div class="bg-white rounded-2xl md:rounded-[2.5rem] shadow-sm border border-slate-100 p-6 md:p-10 mb-8 md:mb-12 flex flex-col items-center text-center">
+            <div class="flex items-center lab-font mb-4">
+                <span class="text-[12vw] sm:text-7xl md:text-8xl text-[#007eb3]">Lab</span>
+                <span class="text-[12vw] sm:text-7xl md:text-8xl text-[#e88d23]">Indonesia</span>
+                <div class="year-stack text-[#007eb3] italic">
+                    <span class="text-[4vw] sm:text-2xl md:text-3xl font-black">20</span>
+                    <span class="text-[4vw] sm:text-2xl md:text-3xl font-black">26</span>
+                </div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-1 bg-[#e88d23] rounded-full"></div>
+                <p class="text-[10px] md:text-xs font-black text-slate-400 tracking-[0.3em] uppercase">ICE BSD CITY • 15-17 APRIL 2026</p>
+            </div>
+        </div>
+
+        <!-- FORM REGISTRASI -->
+        <form id="guestbook-form" class="premium-card overflow-hidden mb-12 relative">
+            <div class="progress-bar h-1.5 bg-slate-50 w-full">
+                <div id="progress" class="h-full progress-active" style="width: 5%;"></div>
             </div>
 
-            <div class="p-6 md:p-16">
-                <div class="flex items-center gap-3 mb-10">
-                    <div class="w-1.5 h-6 bg-[#f39200] rounded-full"></div>
-                    <h2 class="text-xs font-black uppercase tracking-widest text-slate-400">Informasi Pengunjung</h2>
+            <div class="p-6 md:p-14 lg:p-20">
+                <!-- Section 1: Informasi Pengunjung -->
+                <div class="mb-16 md:mb-24">
+                    <div class="flex items-center gap-4 mb-10 md:mb-14">
+                        <div class="w-1.5 h-8 bg-[#e88d23] rounded-full shadow-[0_0_15px_rgba(232,141,35,0.3)]"></div>
+                        <h2 class="text-[11px] md:text-xs font-black uppercase tracking-[0.4em] text-slate-400">Informasi Pengunjung</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-16 gap-y-12">
+                        <div class="input-group">
+                            <input type="text" name="Nama" required placeholder=" ">
+                            <label>Nama Lengkap <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" name="Email" required placeholder=" ">
+                            <label>Email <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="tel" name="No HP" required placeholder=" ">
+                            <label>WhatsApp <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="Perusahaan" required placeholder=" ">
+                            <label>Perusahaan / Instansi <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="Jabatan" required placeholder=" ">
+                            <label>Jabatan <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="Bidang" required placeholder=" ">
+                            <label>Bidang Industri <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="Provinsi" required placeholder=" ">
+                            <label>Provinsi <span class="text-red-500">*</span></label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="Kota" required placeholder=" ">
+                            <label>Kota <span class="text-red-500">*</span></label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
-                    <div class="input-group">
-                        <input type="text" name="Nama" required placeholder=" ">
-                        <label>Nama Lengkap <span class="text-red-500">*</span></label>
+                <!-- Section 2: Rencana Investasi -->
+                <div class="mb-16 md:mb-24">
+                    <div class="flex items-center gap-4 mb-8 md:mb-10 text-slate-400">
+                        <div class="w-1.5 h-8 bg-[#007eb3] rounded-full"></div>
+                        <h2 class="text-[11px] md:text-xs font-black uppercase tracking-[0.4em]">Rencana Investasi (1 Tahun)</h2>
                     </div>
-                    <div class="input-group">
-                        <input type="email" name="Email" required placeholder=" ">
-                        <label>Email <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="tel" name="No HP" required placeholder=" ">
-                        <label>Nomor WhatsApp <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="Perusahaan" required placeholder=" ">
-                        <label>Perusahaan / Instansi <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="Jabatan" required placeholder=" ">
-                        <label>Jabatan / Posisi <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="Bidang" required placeholder=" ">
-                        <label>Bidang Industri / Riset <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="Provinsi" required placeholder=" ">
-                        <label>Provinsi <span class="text-red-500">*</span></label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" name="Kota" required placeholder=" ">
-                        <label>Kota <span class="text-red-500">*</span></label>
-                    </div>
-                </div>
-
-                <!-- RENCANA INVESTASI -->
-                <div class="mb-16">
-                    <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-6">Rencana Investasi (1 Tahun ke Depan)</h2>
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3" id="investasi-group">
-                        <label class="block cursor-pointer">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="investasi-group">
+                        <label class="relative block group">
                             <input type="checkbox" value="GC" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Instrumen</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight">Gas Chromatography (GC)</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Instrumen</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight">Gas Chromatography</span>
                             </div>
                         </label>
-                        <label class="block cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="GCMS" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Instrumen</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight">GCMS / GCMSMS</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Instrumen</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">GCMS / GCMSMS</span>
                             </div>
                         </label>
-                        <label class="block cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="HPLC" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Instrumen</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight">HPLC / UHPLC</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Instrumen</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">HPLC / UHPLC</span>
                             </div>
                         </label>
-                        <label class="block cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="LCMS" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Instrumen</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight">LCMS / LCMSMS</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Instrumen</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">LCMS / LCMSMS</span>
                             </div>
                         </label>
-                        <label class="block cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="Consumables" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Suplai</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight text-center">Consumables & Supplies</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Suplai</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">Consumables</span>
                             </div>
                         </label>
-                        <label class="block cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="Sample Prep" class="peer hidden">
-                            <div class="check-card">
-                                <span class="text-[8px] font-black opacity-30 mb-1 uppercase">Sistem</span>
-                                <span class="text-[10px] font-bold uppercase leading-tight text-center">Sample Preparation</span>
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Sistem</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">Sample Prep</span>
+                            </div>
+                        </label>
+                        <!-- Opsi Baru: Training & Sertifikasi -->
+                        <label class="relative block group">
+                            <input type="checkbox" value="Training Sertifikasi" class="peer hidden">
+                            <div class="check-card p-6 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center text-center h-full">
+                                <span class="text-[9px] font-black opacity-30 uppercase mb-1">Layanan</span>
+                                <span class="text-[10px] md:text-[11px] font-bold uppercase leading-tight text-center">Training & Sertifikasi</span>
                             </div>
                         </label>
                     </div>
                     <input type="hidden" name="Rencana Investasi" id="investasi-hidden">
                 </div>
 
-                <!-- PENGGUNA BNM -->
-                <div class="mb-16">
-                    <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-6 leading-relaxed">Apakah saat ini Anda menggunakan instrumen dari BNM?</h2>
-                    <div class="flex flex-wrap gap-2" id="bnm-group">
-                        <label class="cursor-pointer">
+                <!-- Section 3: Penggunaan BNM -->
+                <div class="mb-16 md:mb-24">
+                    <div class="flex items-center gap-4 mb-10 text-slate-400">
+                        <div class="w-1.5 h-8 bg-[#007eb3] rounded-full"></div>
+                        <h2 class="text-[11px] md:text-xs font-black uppercase tracking-[0.4em]">Penggunaan BNM Saat Ini</h2>
+                    </div>
+                    <div class="flex flex-wrap gap-3" id="bnm-group">
+                        <label class="relative block group">
                             <input type="checkbox" value="GC" class="peer hidden">
-                            <div class="px-5 py-2.5 rounded-full border-2 border-slate-100 peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 transition-all text-[10px] font-bold uppercase tracking-wider text-slate-500">Gas Chromatography</div>
+                            <div class="check-card px-6 py-4 rounded-full text-[10px] font-bold uppercase text-center">Gas Chromatography</div>
                         </label>
-                        <label class="cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="LC" class="peer hidden">
-                            <div class="px-5 py-2.5 rounded-full border-2 border-slate-100 peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 transition-all text-[10px] font-bold uppercase tracking-wider text-slate-500">Liquid Chromatography</div>
+                            <div class="check-card px-6 py-4 rounded-full text-[10px] font-bold uppercase text-center">Liquid Chromatography</div>
                         </label>
-                        <label class="cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="Consumables" class="peer hidden">
-                            <div class="px-5 py-2.5 rounded-full border-2 border-slate-100 peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 transition-all text-[10px] font-bold uppercase tracking-wider text-slate-500">Consumables</div>
+                            <div class="check-card px-6 py-4 rounded-full text-[10px] font-bold uppercase text-center">Consumables</div>
                         </label>
-                        <label class="cursor-pointer">
+                        <label class="relative block group">
                             <input type="checkbox" value="Belum" class="peer hidden">
-                            <div class="px-5 py-2.5 rounded-full border-2 border-slate-100 peer-checked:bg-[#0077b6] peer-checked:text-white peer-checked:border-[#0077b6] transition-all text-[10px] font-bold uppercase tracking-wider text-slate-500 italic opacity-80">Belum Menggunakan</div>
+                            <div class="check-card px-6 py-4 rounded-full text-[10px] font-bold uppercase bg-slate-50 opacity-60">Belum Menggunakan</div>
                         </label>
                     </div>
                     <input type="hidden" name="Pengguna BNM" id="bnm-hidden">
                 </div>
 
-                <div class="space-y-16 mb-16">
+                <!-- Section 4: Saran -->
+                <div class="space-y-12 md:space-y-16 mb-16 md:mb-24">
                     <div class="input-group">
-                        <input type="text" name="Info BNM" id="info-bnm" required placeholder=" ">
-                        <label for="info-bnm">Dari mana Anda mengetahui BNM di Lab Indonesia? <span class="text-red-500">*</span></label>
+                        <input type="text" name="Info BNM" required placeholder=" ">
+                        <label>Dapat Info BNM di Lab Indo dari mana? <span class="text-red-500">*</span></label>
                     </div>
                     <div class="input-group">
-                        <textarea name="Saran" id="saran-bnm" placeholder=" " oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
-                        <label for="saran-bnm">Masukan & Saran untuk BNM</label>
+                        <textarea name="Saran" placeholder=" " rows="1" class="resize-none overflow-hidden transition-all" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                        <label>Masukan & Saran untuk BNM</label>
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <button type="submit" id="submit-btn" class="w-full md:w-auto bg-[#001f54] hover:bg-black text-white font-black uppercase tracking-[0.2em] py-5 px-16 rounded-2xl shadow-xl transition-all active:scale-[0.98] disabled:opacity-50">
-                        Kirim Pendaftaran
+                <!-- Tombol Aksi -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8 pt-4">
+                    <button type="submit" id="submit-btn" class="w-full md:w-auto bg-[#001f54] hover:bg-black text-white font-[900] uppercase tracking-[0.3em] py-6 md:py-8 px-10 md:px-24 rounded-2xl md:rounded-[2.5rem] shadow-2xl transition-all active:scale-[0.97] flex items-center justify-center gap-4">
+                        <span id="btn-text">Kirim Pendaftaran</span>
+                        <div id="btn-loader" class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     </button>
-                    <button type="reset" class="text-slate-300 hover:text-red-500 text-[10px] font-bold uppercase tracking-widest underline underline-offset-8">Kosongkan Form</button>
+                    <button type="reset" class="text-slate-300 hover:text-red-600 text-[10px] font-black uppercase tracking-[0.5em] underline underline-offset-[14px] transition-all">Reset Form</button>
+                </div>
+
+                <div id="error-msg" class="hidden mt-8 p-4 bg-red-50 text-red-500 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center border border-red-100">
+                    Mohon lengkapi semua data wajib (*) dan pilihan instrumen.
                 </div>
             </div>
         </form>
 
-        <footer class="text-center pb-12">
-            <div class="w-16 h-1 bg-[#ed1c24] mx-auto mb-4 rounded-full"></div>
-            <p class="text-[11px] text-[#001f54] font-black uppercase tracking-[0.5em]">PT. Berca Niaga Medika</p>
-            <p class="text-[9px] text-slate-400 font-bold tracking-[0.2em] uppercase mt-2">Laboratory Solutions Provider</p>
+        <!-- Footer -->
+        <footer class="text-center pb-16 px-4">
+            <div class="flex flex-col items-center gap-6">
+                <p class="bnm-font text-lg md:text-2xl text-[#001f54] leading-tight uppercase tracking-tight">
+                    PT. Berca Niaga Medika
+                </p>
+
+                <div class="flex items-center justify-center gap-4">
+                    <div class="h-px w-8 md:w-12 bg-slate-200"></div>
+                    <p class="text-[11px] md:text-[14px] text-[#ed1c24] font-black uppercase tracking-[0.4em] italic text-center">
+                        Towards Service Excellence
+                    </p>
+                    <div class="h-px w-8 md:w-12 bg-slate-200"></div>
+                </div>
+            </div>
         </footer>
 
-        <!-- MODAL BERHASIL -->
-        <div id="success-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden z-50 flex items-center justify-center p-6">
-            <div class="bg-white rounded-[2.5rem] p-10 max-w-sm w-full text-center shadow-2xl">
-                <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+        <!-- Modal Sukses -->
+        <div id="success-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-xl hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-16 max-w-sm w-full text-center shadow-2xl scale-in border-4 border-blue-50">
+                <div class="w-16 h-16 md:w-28 md:h-28 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 border-4 border-green-100">
+                    <svg class="w-10 h-10 md:w-14 md:h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <h3 class="text-3xl font-black text-[#001f54] tracking-tight mb-2">Terima Kasih!</h3>
-                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-10">Data Anda telah berhasil diproses.</p>
-                <button onclick="window.location.reload()" class="w-full bg-[#001f54] text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:bg-black transition-all">Selesai</button>
+                <h3 class="text-2xl md:text-4xl font-black text-[#001f54] tracking-tighter mb-4">Berhasil!</h3>
+                <p class="text-slate-500 text-[10px] md:text-sm font-semibold mb-10 md:mb-14 uppercase tracking-widest leading-relaxed">Data Anda telah kami simpan. Sampai jumpa di booth kami!</p>
+                <button onclick="window.location.reload()" class="w-full bg-[#001f54] text-white font-black uppercase tracking-[0.3em] py-5 md:py-7 rounded-2xl md:rounded-3xl hover:bg-black transition-all">Selesai</button>
             </div>
         </div>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzKjwWLmeXJN9JqXcJPmqB0dB4D3W_yRDsMgiY1-gG6KpSmhXX884tzYw0BJVJoWaNKwg/exec';
-        
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyyHKetOsMtaOcW5araQx-A5gYNBoutuJLoWYKPvxis1rzg4mS7WHMHkXEPL-jcSCn_/exec';
         const form = document.getElementById('guestbook-form');
         const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnLoader = document.getElementById('btn-loader');
         const overlay = document.getElementById('success-overlay');
         const progress = document.getElementById('progress');
+        const errorMsg = document.getElementById('error-msg');
 
-        form.addEventListener('input', () => {
-            const requireds = form.querySelectorAll('input[required]');
+        const updateProgress = () => {
+            const requiredFields = form.querySelectorAll('input[required]');
             let filled = 0;
-            requireds.forEach(i => { if(i.value.trim() !== "") filled++ });
-            const percent = (filled / requireds.length) * 100;
-            progress.style.width = Math.max(5, percent) + '%';
-        });
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
+            requiredFields.forEach(input => {
+                if (input.value && input.value.trim() !== "") filled++;
+            });
             
-            // Collect Checkboxes
+            const hasInvestasi = form.querySelectorAll('#investasi-group input:checked').length > 0;
+            const hasBNM = form.querySelectorAll('#bnm-group input:checked').length > 0;
+            const checksFilled = (hasInvestasi && hasBNM) ? 1 : 0;
+            
+            const totalSteps = requiredFields.length + 1;
+            const currentSteps = filled + checksFilled;
+            
+            const percent = (currentSteps / totalSteps) * 100;
+            progress.style.width = Math.max(5, percent) + '%';
+        };
+
+        form.addEventListener('input', updateProgress);
+        form.addEventListener('change', updateProgress);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.classList.add('hidden');
+            
             const investasi = Array.from(document.querySelectorAll('#investasi-group input:checked')).map(el => el.value);
             const bnm = Array.from(document.querySelectorAll('#bnm-group input:checked')).map(el => el.value);
 
             if(investasi.length === 0 || bnm.length === 0) {
-                const msg = investasi.length === 0 ? "Mohon pilih minimal satu rencana investasi." : "Mohon pilih status penggunaan instrumen BNM.";
-                alert(msg);
+                errorMsg.classList.remove('hidden');
+                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
 
@@ -323,28 +389,34 @@
             document.getElementById('bnm-hidden').value = bnm.join(', ');
 
             submitBtn.disabled = true;
-            submitBtn.innerText = 'MEMPROSES...';
+            btnText.innerText = 'MEMPROSES...';
+            btnLoader.classList.remove('hidden');
 
-            // Menggunakan FormData agar sesuai dengan e.parameter di Apps Script
-            const formData = new FormData(form);
-
-            fetch(scriptURL, { 
-                method: 'POST', 
-                body: formData
-            })
-            .then(response => {
+            try {
+                await fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: new FormData(form), 
+                    mode: 'no-cors' 
+                });
+                
                 overlay.classList.remove('hidden');
                 form.reset();
                 progress.style.width = '5%';
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
+                
+            } catch (error) {
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'KIRIM PENDAFTARAN';
-                alert('Berhasil terkirim! (Jika data masuk ke Sheet tapi muncul error ini, abaikan saja karena kebijakan CORS Google).');
-                // Tetap tampilkan sukses karena mode no-cors sering memicu catch padahal data masuk
-                overlay.classList.remove('hidden');
-            });
+                btnText.innerText = 'KIRIM PENDAFTARAN';
+                btnLoader.classList.add('hidden');
+                errorMsg.innerText = 'Terjadi kesalahan koneksi. Silakan coba lagi.';
+                errorMsg.classList.remove('hidden');
+            }
+        });
+
+        form.addEventListener('reset', () => {
+            setTimeout(() => {
+                progress.style.width = '5%';
+                errorMsg.classList.add('hidden');
+            }, 10);
         });
     </script>
 </body>
